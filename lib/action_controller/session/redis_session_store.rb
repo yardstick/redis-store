@@ -29,6 +29,8 @@ module RedisStore
             server.merge(options)
           end
 
+          @redis_options = options.fetch(:redis_options, {})
+
           @pool = Redis::Factory.create(*servers)
         end
 
@@ -45,7 +47,7 @@ module RedisStore
 
           def set_session(env, sid, session_data, opts=nil)
             options = env['rack.session.options']
-            @pool.set(sid, session_data, options)
+            @pool.set(sid, session_data, options.merge(@redis_options))
             return(::Redis::Store.rails3? ? sid : true)
           rescue Errno::ECONNREFUSED
             return false
