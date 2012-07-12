@@ -33,7 +33,7 @@ namespace :spec do
 
   Spec::Rake::SpecTask.new(:run) do |t|
     t.spec_files = FileList['spec/**/*_spec.rb']
-    t.spec_opts = %w(-fs --color)
+    t.spec_opts = %w(-fs --color --debugger)
   end
 end
 
