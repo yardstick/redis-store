@@ -64,6 +64,25 @@ describe "Redis::Marshalling" do
     rabbit2.should == @white_rabbit
   end
 
+  context "marshal with expire" do
+    def test_expire_with_key(key)
+      @store.setnx "rabbit", @rabbit, key => 1.minute
+      @store.get("rabbit").should === @rabbit
+    end
+
+    it "should work with rack key" do
+      test_expire_with_key(:expire_after)
+    end
+
+    it "should work with merb key" do
+      test_expire_with_key(:expires_in)
+    end
+
+    it "should work with rails key" do
+      test_expire_with_key(:expire_in)
+    end
+  end
+
   if RUBY_VERSION.match /1\.9/
     it "should not unmarshal object(s) on multi get if raw option is true" do
       @store.set "rabbit2", @white_rabbit
